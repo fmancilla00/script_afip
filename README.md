@@ -36,9 +36,7 @@ El archivo JSON a recibir es de la forma:
   "head": {
     "remito": "0001-00001234",
     "OC": "4500123456",
-    "ubiIndex": 0,
     "local": "BSAS",
-    "fecha": "2023-08-17",
     "cliente": "EMPRESA",
     "cuit": "99009900999",
     "dolar": false,
@@ -47,3 +45,6 @@ El archivo JSON a recibir es de la forma:
 }
 
 ```
+Dentro de Head se encuentra local que es la localidad en la que se encuentra el receptor, dolar indica si se remitió utilizando moneda dolar y dirVariable indica si el receptor tiene más de una dirección de facturación. 
+Se pueden generar archivos de este tipo con este proyecto: [Sistema Remitos](https://github.com/fmancilla00/Sistema-Remitos)
+

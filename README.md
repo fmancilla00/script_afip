@@ -1,17 +1,33 @@
 # Script Facturación AFIP
-Generación de facturas mediante web scrapping.
+Generación de facturas mediante web scraping.
 
-Se necesita un archivo JSON del que recibir los items a facturar y una ruta en la que se encuentre. Se espera que el nombre del archivo JSON tenga el formato 0001-________. 
+Este script permite generar facturas utilizando técnicas de web scraping. El proceso requiere un archivo JSON que contenga los elementos a facturar, así como una ruta específica donde se encuentra dicho archivo. El nombre del archivo JSON debe seguir el formato `0001-________`.
 
-Necesita Python y Selenium. Además de Chrome y WebDriver. 
+## Requisitos
+- Python y Selenium.
+- Google Chrome y el correspondiente WebDriver.
 
-Version para Linux (recomendada) en la que se usa un chromium-browser y su respectivo webdriver
+## Instalación
+1. Instala Python en tu sistema.
+2. Instala Selenium ejecutando el siguiente comando:
+   ```
+   pip install selenium
+   ```
+3. Descarga el navegador Google Chrome si no lo tienes instalado.
+4. Descarga el WebDriver correspondiente a tu versión de Chrome y colócalo en una ubicación accesible.
 
-Para su uso se pretende que dentro del código se añada la ruta a la carpeta donde se almacenan los remitos (RUTA) y en cuit_usr cargar el cuit del receptor. Una vez seteado eso se podrá usar.
+## Uso
+1. Abre el script y establece la ruta a la carpeta donde se almacenan los remitos en la variable `RUTA`.
+2. Completa el campo `cuit_usr` con el CUIT del receptor.
+3. Ejecuta el script.
 
-El archivo JSON a recibir es de la forma:
+## Disclaimer
+Tener en cuenta que la forma de abrir una pestaña en el navegador puede variar según el WebDriver que estés utilizando. Es posible que debas ajustar la parte del script que controla la apertura de pestañas para que sea compatible con tu WebDriver específico.
+
+## Archivo JSON
+El archivo JSON necesario para el proceso de facturación debe tener la siguiente estructura:
+
 ```json
-
 {
   "mats": [
     {
@@ -34,7 +50,7 @@ El archivo JSON a recibir es de la forma:
       "id": "f651a1d7-d100-4e14-9518-b2fcf937f638",
       "cantidad": "90",
       "codigo": "",
-      "desc": "item 3",
+      "desc": "Item 3",
       "precio": "90",
       "iva": "10.5"
     }
@@ -49,9 +65,8 @@ El archivo JSON a recibir es de la forma:
     "dirVariable": true
   }
 }
-
 ```
-Se pueden generar archivos de este tipo con este proyecto: [Sistema Remitos](https://github.com/fmancilla00/Sistema-Remitos)
 
-Dentro de Head se encuentra local que es la localidad en la que se encuentra el receptor, dolar indica si se remitió utilizando moneda dolar y dirVariable indica si el receptor tiene más de una dirección de facturación. 
+Dentro de la sección `head`, encontrarás el campo `local`, que corresponde a la localidad del receptor; `dolar`, que indica si se remitió utilizando moneda dólar; y `dirVariable`, que indica si el receptor tiene más de una dirección de facturación.
 
+Si necesitas generar archivos JSON como el mencionado anteriormente, puedes utilizar el proyecto "Sistema Remitos", disponible en [Sistema Remitos](https://github.com/fmancilla00/Sistema-Remitos).

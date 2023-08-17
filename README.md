@@ -1,7 +1,11 @@
 # Script Facturación AFIP
-Generación de facturas mediante web scrapping. 
-Se necesita un archivo JSON del que recibir los items a facturar, una ruta en la que se encuentre y el nombre con el formato 0001-________. 
-Necesita Python y Selenium. Además de Chrome y WebDriver. Verison para Windows que suele ser más facil de acceder al driver, y uuan version para Linux (recomendada) en la que se usa un chromium-browser y su respectivo driver que suele ser más fácil de instalar.
+Generación de facturas mediante web scrapping.
+
+Se necesita un archivo JSON del que recibir los items a facturar y una ruta en la que se encuentre. Se espera que el nombre del archivo JSON tenga el formato 0001-________. 
+
+Necesita Python y Selenium. Además de Chrome y WebDriver. 
+
+Version para Linux (recomendada) en la que se usa un chromium-browser y su respectivo webdriver
 
 Para su uso se pretende que dentro del código se añada la ruta a la carpeta donde se almacenan los remitos (RUTA) y en cuit_usr cargar el cuit del receptor. Una vez seteado eso se podrá usar.
 

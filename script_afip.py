@@ -8,13 +8,14 @@ if __name__ == '__main__':
 
     #Scrap
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = '/usr/bin/chromium-browser'  # Ruta al binario de Chrome
+    #chrome_options.binary_location = '/usr/bin/chromium-browser'  # Ruta al binario de Chromium
     
-    PASSWORD = input(' * Ingresá la contraseña de AFIP: ')
-    RUTA = '/home/fmancilla/Remitos/'
-    cuit_usr = '27223443414'
+    print('================= Facturación ==================\n')
+    
+    RUTA = ''        # Completar
+    cuit_usr = ''    # Completar
 
-    print('================= Facturación Nicfer ==================\n')
+    PASSWORD = input(' * Ingresá la contraseña de AFIP: ')
 
     while True:
 

@@ -17,8 +17,8 @@ Este script permite generar facturas utilizando técnicas de web scraping. El pr
 4. Descarga el WebDriver correspondiente a tu versión de Chrome y colócalo en una ubicación accesible.
 
 ## Uso
-1. En el archivo script_afip.py: Abre el script y establece la ruta a la carpeta donde se almacenan los remitos en la variable `RUTA`.
-2. En el archivo script_afip.py: Completa el campo `cuit_usr` con el CUIT del emisor.
+1. Establece la ruta a la carpeta donde se almacenan los remitos en la variable `RUTA`, dentro del archivo `script_afip.py`.
+2. Completa el campo `cuit_usr` con el CUIT del emisor en el mismo archivo `script_afip.py`.
 3. Ejecuta el script.
 
 ## Disclaimer

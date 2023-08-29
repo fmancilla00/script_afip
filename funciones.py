@@ -25,8 +25,9 @@ def ingresarRemito():
     while True:
         try:
             remito_in = input(" * Ingresá el remito, sin incluir el punto de venta por ejemplo 00012400: ")
-            if len(remito_in) != 8 or not remito_in.isdigit():
-                raise ValueError("El número debe tener exactamente 8 dígitos y ser un número válido.")
+            if not remito_in.isdigit():
+                raise ValueError("Intenta nuevamente. No ingresaste un número válido.")
+            remito_in = remito_in.zfill(8)
             return remito_in
         except ValueError as error:
             print("Error:", error)

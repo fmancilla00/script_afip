@@ -14,7 +14,7 @@ def login(driver, username, password):
 
 def abrirArchivo(ruta):
     try:
-        with open(ruta, "r") as archivo_json:
+        with open(ruta, "r", encoding="utf-8") as archivo_json:
             return json.load(archivo_json)
     except FileNotFoundError:
         raise FileNotFoundError("El archivo no se encontró. Es posible que se haya remitido de manera errónea.")

@@ -126,11 +126,10 @@ def set_datos_op(driver, mats, ordenes):
         if elem['iva'] == '10.5':
             ivas[index].click()
 
-def abrirPagina(url, options):
+def abrirNavegador(options):
     driver = webdriver.Chrome(options)
     width, height = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
     driver.set_window_size(800, height)
     driver.set_window_position(width - 700, 0)
-    driver.get(url)
     return driver
 

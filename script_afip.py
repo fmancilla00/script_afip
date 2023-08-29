@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from funciones import login, abrirArchivo, ingresarRemito, obtenerDolar, seleccionarTipoComprobante, set_datos_emision, set_datos_op, set_datos_receptor, abrirPagina
+from funciones import login, abrirArchivo, ingresarRemito, obtenerDolar, seleccionarTipoComprobante, set_datos_emision, set_datos_op, set_datos_receptor, abrirNavegador
 
 
 if __name__ == '__main__':
@@ -38,10 +38,12 @@ if __name__ == '__main__':
         LOCAL = head['local']
         DOLAR = 0
 
+        driver = abrirNavegador(chrome_options)
+        
         if usaDolar:
             DOLAR = obtenerDolar(driver)
-        
-        driver = abrirPagina("https://auth.afip.gob.ar/contribuyente_/login.xhtml?action=SYSTEM&system=rcel", chrome_options)
+
+        driver.get("https://auth.afip.gob.ar/contribuyente_/login.xhtml?action=SYSTEM&system=rcel")
 
         login(driver, cuit_usr, PASSWORD)
 

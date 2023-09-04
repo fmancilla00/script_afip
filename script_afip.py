@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
         driver.get("https://auth.afip.gob.ar/contribuyente_/login.xhtml?action=SYSTEM&system=rcel")
 
-        login(driver, cuit_usr, PASSWORD)
+        PASSWORD = login(driver, cuit_usr, PASSWORD)
 
         # Selección de empresa
         clickable_empresa = driver.find_element(By.XPATH, "//input[@class='btn_empresa ui-button ui-widget ui-state-default ui-corner-all']")

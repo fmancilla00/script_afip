@@ -7,10 +7,16 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 def login(driver, username, password):
-    driver.find_element(By.ID, 'F1:username').send_keys(username)
-    driver.find_element(By.ID, 'F1:btnSiguiente').click()
-    driver.find_element(By.ID, 'F1:password').send_keys(password)
-    driver.find_element(By.ID, 'F1:btnIngresar').click()
+    while True:
+        driver.find_element(By.ID, 'F1:username').send_keys(username)
+        driver.find_element(By.ID, 'F1:btnSiguiente').click()
+        driver.find_element(By.ID, 'F1:password').send_keys(password)
+        driver.find_element(By.ID, 'F1:btnIngresar').click()
+        errors = driver.find_elements(By.XPATH, '//*[@id="F1:msg"]')
+        if len(errors) == 0:
+            break
+        password = input("Contraseña incorrecta. Ingresala de nuevo: ")
+    return password
 
 def abrirArchivo(ruta):
     try:

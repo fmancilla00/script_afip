@@ -76,11 +76,16 @@ def set_datos_emision_fce(driver,dolar, usaDolar, cbu, alias):
     
     if usaDolar:
         driver.find_element(By.XPATH, '//*[@id="monedaextranjera"]').click()
+
+    days = input("Ingresá a cuantos días será la condición de pago \n")
+
+    if usaDolar:
+        driver.find_element(By.XPATH, '//*[@id="tipocambio"]').clear()
         driver.find_element(By.XPATH, '//*[@id="tipocambio"]').send_keys(dolar)
 
     # Obtención fecha
     fecha_actual = datetime.now()
-    days = input("Ingresá a cuantos días será la condición de pago \n")
+    
     fecha_futura = fecha_actual + timedelta(days=int(days))
     fecha_futura = fecha_futura.strftime("%d/%m/%Y")
     print(fecha_futura)

@@ -10,15 +10,14 @@ if __name__ == '__main__':
     chrome_options = webdriver.ChromeOptions()
     chrome_options.binary_location = '/usr/bin/chromium-browser'  # Ruta al binario de Chromium
     
-    print('================= Facturación ==================\n')
-    
-
     config = abrirArchivo('config.json')
 
     RUTA = config['ruta']
     cuit_usr = config['cuit']
     CBU = config['cbu']
     ALIAS = config['alias']
+
+    print('================= Facturación ==================\n')
 
 
     PASSWORD = input(' * Ingresá la contraseña de AFIP: ')
@@ -28,6 +27,10 @@ if __name__ == '__main__':
         remito_in = ingresarRemito()
         remito_file = '0001-' + remito_in + '.json'
         RUTA_JSON = RUTA + remito_file
+
+        # Input FCE
+        fce = input("Ingresá el tipo de comprobante: \n 1. Factura A\n 2. FCE A\n")
+        fce = True if (int(fce) == 2) else False
 
         # Leo datos
         data = abrirArchivo(RUTA_JSON)
@@ -43,11 +46,6 @@ if __name__ == '__main__':
         LOCAL = head['local']
         DOLAR = 0
         FECHA = head['fecha']
-
-        fce = input("Ingresá el tipo de comprobante: \n 1. Factura A\n 2. FCE A\n")
-        print(fce)
-        fce = True if (int(fce) == 2) else False
-        print(fce)
 
         driver = abrirNavegador(chrome_options)
         

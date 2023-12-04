@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -49,12 +50,15 @@ def obtenerDolar(driver):
         valor_ingresado = input("Ingresa el valor del dólar manualmente: ")
         return valor_ingresado
 
-def seleccionarTipoComprobante(driver):
+def seleccionarTipoComprobante(driver, fce):
     select_element = driver.find_element(By.ID,"puntodeventa")
     opcion = select_element.find_element(By.XPATH, '//*[@id="puntodeventa"]/option[2]')
     opcion.click()
     wait = WebDriverWait(driver, 10)
-    wait.until(EC.presence_of_element_located((By.XPATH, '//option[@value="10" and text()="Factura A"]'))) #espero hasta que procese la opcion
+    wait.until(EC.presence_of_element_located((By.XPATH, '//option[@value="10" and text()="Factura A"]')))
+    #espero hasta que procese la opcion
+    if fce:
+        driver.find_element(By.XPATH, '//*[@id="universocomprobante"]/option[12]').click()
     driver.find_element(By.XPATH, '//*[@id="contenido"]/form/input[2]').click()  # Continue
     
 def set_datos_emision(driver,dolar, usaDolar):
@@ -63,6 +67,68 @@ def set_datos_emision(driver,dolar, usaDolar):
         driver.find_element(By.XPATH, '//*[@id="monedaextranjera"]').click()
         driver.find_element(By.XPATH, '//*[@id="tipocambio"]').send_keys(dolar)
     driver.find_element(By.XPATH, '//*[@id="contenido"]/form/input[2]').click() # Continuar
+
+def set_datos_emision_fce(driver,dolar, usaDolar, cbu, alias):
+    driver.find_element(By.XPATH, '//*[@id="idconcepto"]/option[2]').click()           # Selección productos
+    driver.find_element(By.XPATH, '//*[@id="cbuEmisor"]').send_keys(cbu)               # Cbu
+    driver.find_element(By.XPATH, '//*[@id="aliasCbuEmisor"]').send_keys(alias)        # Alias
+    driver.find_element(By.XPATH, '//*[@id="opcionTransferencia"]/option[3]').click()  # Opcion transf. 
+    
+    if usaDolar:
+        driver.find_element(By.XPATH, '//*[@id="monedaextranjera"]').click()
+        driver.find_element(By.XPATH, '//*[@id="tipocambio"]').send_keys(dolar)
+
+    # Obtención fecha
+    fecha_actual = datetime.now()
+    days = input("Ingresá a cuantos días será la condición de pago \n")
+    fecha_futura = fecha_actual + timedelta(days=int(days))
+    fecha_futura = fecha_futura.strftime("%d/%m/%Y")
+    print(fecha_futura)
+    driver.find_element(By.XPATH, '//*[@id="vencimientopago"]').clear()
+    driver.find_element(By.XPATH, '//*[@id="vencimientopago"]').send_keys(fecha_futura)
+
+    driver.find_element(By.XPATH, '//*[@id="contenido"]/form/input[2]').click() # Continuar
+
+
+
+def set_datos_receptor_fce(driver, cuit, remito, local, usaDir, fecha_r):
+    driver.find_element(By.XPATH, '//*[@id="idivareceptor"]/option[2]').click()
+    driver.find_element(By.XPATH, '//*[@id="nrodocreceptor"]').send_keys(cuit)
+
+     # Fecha remito
+    fecha_original = datetime.strptime(fecha_r, "%Y-%m-%d")
+    fecha_formateada = fecha_original.strftime("%d/%m/%Y")
+    driver.find_element(By.XPATH, '//*[@id="tablacmpasoc"]/tbody/tr[2]/td[4]/input').send_keys(fecha_formateada)
+
+    wait = WebDriverWait(driver, 10)
+    wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="domicilioreceptor"]/option[1]'))) #Espero a que carguen las dir
+
+    opcion = 1
+
+    if usaDir:
+        print("\nEl proveedor tiene más de una dirección de facturación posible. Elegí alguna de las opciones:\n")
+        print(f"El remito tiene localidad: {local} \n")
+        sel = driver.find_element(By.XPATH, '//*[@id="domicilioreceptor"]')
+        opciones = sel.find_elements(By.TAG_NAME, 'option')
+        for index, opcion in enumerate(opciones):
+            print(f' - {index + 1}: {opcion.text}')
+        
+        while True:
+            opcion = input('\nIngresa numero del item: ').strip()
+            if (not(opcion.isdigit()) or int(opcion) > len(opciones) or int(opcion) < 1):
+                print("Valor invalido, intenta nuevamente")
+            else:
+                break
+    
+
+    # Direccion:
+    path = f'//*[@id="domicilioreceptor"]/option[{opcion}]'
+    driver.find_element(By.XPATH, path).click()
+
+    driver.find_element(By.XPATH, '//*[@id="tablacmpasoc"]/tbody/tr[2]/td[1]/input').send_keys('00001')
+    driver.find_element(By.XPATH, '//*[@id="tablacmpasoc"]/tbody/tr[2]/td[2]/input').send_keys(remito)
+
+    driver.find_element(By.XPATH, '//*[@id="formulario"]/input[2]').click()
 
 def set_datos_receptor(driver, cuit, remito, local, usaDir):
     driver.find_element(By.XPATH, '//*[@id="idivareceptor"]/option[2]').click()
@@ -97,6 +163,7 @@ def set_datos_receptor(driver, cuit, remito, local, usaDir):
 
     driver.find_element(By.XPATH, '//*[@id="tablacmpasoc"]/tbody/tr[2]/td[1]/input').send_keys('00001')
     driver.find_element(By.XPATH, '//*[@id="tablacmpasoc"]/tbody/tr[2]/td[2]/input').send_keys(remito)
+
     driver.find_element(By.XPATH, '//*[@id="formulario"]/input[2]').click()
 
 def set_datos_op(driver, mats, ordenes):
@@ -132,6 +199,8 @@ def set_datos_op(driver, mats, ordenes):
         medidas[index].click()
         if elem['iva'] == '10.5':
             ivas[index].click()
+
+
 
 def abrirNavegador(options):
     driver = webdriver.Chrome(options)

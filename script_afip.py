@@ -1,24 +1,29 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from funciones import login, abrirArchivo, ingresarRemito, obtenerDolar, seleccionarTipoComprobante, set_datos_emision, set_datos_op, set_datos_receptor, abrirNavegador
+from funciones import login, abrirArchivo, ingresarRemito, obtenerDolar, seleccionarTipoComprobante, set_datos_emision, set_datos_op, set_datos_receptor, abrirNavegador, set_datos_emision_fce, set_datos_receptor_fce
 
 
 if __name__ == '__main__':
 
     #Scrap
     chrome_options = webdriver.ChromeOptions()
-    #chrome_options.binary_location = '/usr/bin/chromium-browser'  # Ruta al binario de Chromium
+    chrome_options.binary_location = '/usr/bin/chromium-browser'  # Ruta al binario de Chromium
     
     print('================= Facturación ==================\n')
     
-    RUTA = ''        # Completar
-    cuit_usr = ''    # Completar
+
+    config = abrirArchivo('config.json')
+
+    RUTA = config['ruta']
+    cuit_usr = config['cuit']
+    CBU = config['cbu']
+    ALIAS = config['alias']
+
 
     PASSWORD = input(' * Ingresá la contraseña de AFIP: ')
 
     while True:
-
         # Construyo nombre del archivo
         remito_in = ingresarRemito()
         remito_file = '0001-' + remito_in + '.json'
@@ -37,6 +42,12 @@ if __name__ == '__main__':
         usaDir = head['dirVariable']
         LOCAL = head['local']
         DOLAR = 0
+        FECHA = head['fecha']
+
+        fce = input("Ingresá el tipo de comprobante: \n 1. Factura A\n 2. FCE A\n")
+        print(fce)
+        fce = True if (int(fce) == 2) else False
+        print(fce)
 
         driver = abrirNavegador(chrome_options)
         
@@ -56,17 +67,26 @@ if __name__ == '__main__':
         clickable_gen.click()
 
         # Tipo comprobante
-        seleccionarTipoComprobante(driver)
+        if not fce:
+            seleccionarTipoComprobante(driver, False)
 
-        # Datos de emisión
-        set_datos_emision(driver, DOLAR, usaDolar)
-        
-        # Datos receptor
-        set_datos_receptor(driver, CUIT, REMITO, LOCAL, usaDir)
+            # Datos de emisión
+            set_datos_emision(driver, DOLAR, usaDolar)
 
-        # Datos operación
-        set_datos_op(driver, mats, OCs)
-        
+            # Datos receptor
+            set_datos_receptor(driver, CUIT, REMITO, LOCAL, usaDir)
+
+            # Datos operación
+            set_datos_op(driver, mats, OCs)
+        else:
+            seleccionarTipoComprobante(driver, True)
+
+            # Datos de emisión
+            set_datos_emision_fce(driver, DOLAR, usaDolar, CBU, ALIAS)
+
+            set_datos_receptor_fce(driver, CUIT, REMITO, LOCAL, usaDir, FECHA)
+
+            set_datos_op(driver, mats, OCs)
 
         print('\n')
         entrada = input(" * Enter para emitir una nueva factura. No te olvides de confirmar e imprimir la anterior ")
